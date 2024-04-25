@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if requests %}
+        <h1>Amount Requests</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Sender</th>
+                <th scope="col">Receiver</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for request in requests %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ request.requester.email }}</td>
+                    <td>{{ request.receiver.email }}</td>
+                    <td>{{ request.amount }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        {% if request.status == 'PENDING' %}
+                            <form action="{% url 'request_action' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ request.id }}">
+                                <input type="hidden" name="status" value="DECLINED">
+                                <button type="submit" class="btn btn-danger">Decline</button>
+                            </form>
+                            <button type="button" class="btn btn-success" onclick="confirmTransfer('{{ request.id }}', '{{ request.requester.email }}', '{{ request.amount }}')">Transfer</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="text-align: center;">
+            <p style="font-size: 24px; font-weight: bold;">No requests found.</p>
+        </div>
+    {% endif %}
+
+    <script>
+        function confirmTransfer(requestId, receiverEmail, amount) {
+            if (confirm("Are you sure you want to transfer the amount?")) {
+                // Call request_action view to update the request status
+                var requestActionForm = document.createElement('form');
+                requestActionForm.method = 'post';
+                requestActionForm.action = '{% url "request_action" %}';
+                var csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                var requestIdInput = document.createElement('input');
+                requestIdInput.type = 'hidden';
+                requestIdInput.name = 'id';
+                requestIdInput.value = requestId;
+                var statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                statusInput.value = 'ACCEPTED'; // Change the status value to ACCEPTED
+                requestActionForm.appendChild(csrfToken);
+                requestActionForm.appendChild(requestIdInput);
+                requestActionForm.appendChild(statusInput);
+                // Append the form to the document but don't submit it yet
+                // document.body.appendChild(requestActionForm);
+
+                // Call send_amount view to transfer the amount
+                var sendAmountForm = document.createElement('form');
+                sendAmountForm.method = 'post';
+                sendAmountForm.action = '{% url "send_amount" %}';
+                var csrfToken2 = document.createElement('input');
+                csrfToken2.type = 'hidden';
+                csrfToken2.name = 'csrfmiddlewaretoken';
+                csrfToken2.value = '{{ csrf_token }}';
+                var receiverEmailInput = document.createElement('input');
+                receiverEmailInput.type = 'hidden';
+                receiverEmailInput.name = 'receiver_email';
+                receiverEmailInput.value = receiverEmail;
+                var amountInput = document.createElement('input');
+                amountInput.type = 'hidden';
+                amountInput.name = 'amount';
+                amountInput.value = amount;
+                sendAmountForm.appendChild(csrfToken2);
+                sendAmountForm.appendChild(receiverEmailInput);
+                sendAmountForm.appendChild(amountInput);
+
+                // Append the sendAmountForm inside the requestActionForm
+                requestActionForm.appendChild(sendAmountForm);
+                document.body.appendChild(requestActionForm);
+                // Submit the requestActionForm
+                requestActionForm.submit();
+            }
+        }
+    </script>
+
+{% endblock %}

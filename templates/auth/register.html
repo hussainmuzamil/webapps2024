@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+{% load crispy_forms_filters %} 
+{% load crispy_forms_tags %} {% block content %}
+    <div class="container">
+        <div class="row vh-100 justify-content-center">
+            <div class="col-md-6">
+                <div class="registration-box">
+                    <h2 class="text-center">Add Admin</h2>
+                    <form method="POST">
+                        {% csrf_token %} {% for field in form %}
+                        <div class="form-group">
+                            {{ field|as_crispy_field }} {% if field.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %} {{ error }} {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                    {% endfor %}
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">
+                            Register
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

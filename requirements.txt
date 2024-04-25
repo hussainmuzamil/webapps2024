@@ -1,0 +1,7 @@
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+PyJWT
+pytz
+python-dotenv
+pip~=24.0
