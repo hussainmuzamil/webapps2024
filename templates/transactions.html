@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
     {% if transactions %}
-        <h1 class="text-center font-weight-bold">Transactions</h1>
+        <h1 class="text-center mb-3 font-weight-bold">Transactions</h1>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table text-center table-light table-hover table-bordered border-dark table-striped mb-5">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -16,7 +16,7 @@
                 <tbody>
                 {% for transaction in transactions %}
                     <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
+                        <th class="d-flex justify-content-center align-content-center" scope="row">{{ forloop.counter }}</th>
                         <td>{{ transaction.sender_email }}</td>
                         <td>{{ transaction.receiver_email}}</td>
                         <td>{{ transaction.amount }}</td>
@@ -27,8 +27,8 @@
             </table>
         </div>
     {% else %}
-        <div class="text-center font-weight-bold">
-            <p>No transactions found.</p>
+        <div style="text-align: center;" class="d-flex justify-content-center align-content-center">
+            <p class="placeholder-glow" style="font-size: 24px; font-weight: bold;">No Transactions Found</p>
         </div>
     {% endif %}
 {% endblock %}

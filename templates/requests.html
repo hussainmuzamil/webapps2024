@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
     {% if requests %}
-        <h1>Amount Requests</h1>
-        <table class="table">
+        <h1 class="text-center mb-3 font-weight-bold">Amount Requests</h1>
+        <table class="table text-center table-light table-hover table-bordered border-dark table-striped mb-5">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -22,23 +22,25 @@
                     <td>{{ request.amount }}</td>
                     <td>{{ request.status }}</td>
                     <td>
-                        {% if request.status == 'PENDING' %}
-                            <form action="{% url 'request_action' %}" method="post" style="display: inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="id" value="{{ request.id }}">
-                                <input type="hidden" name="status" value="DECLINED">
-                                <button type="submit" class="btn btn-danger">Decline</button>
-                            </form>
-                            <button type="button" class="btn btn-success" onclick="confirmTransfer('{{ request.id }}', '{{ request.requester.email }}', '{{ request.amount }}')">Transfer</button>
-                        {% endif %}
+                        <div>
+                            {% if request.status == 'PENDING' %}
+                                <button type="button" class="btn btn-success" onclick="confirmTransfer('{{ request.id }}', '{{ request.requester.email }}', '{{ request.amount }}')">Transfer</button>
+                                <form action="{% url 'request_action' %}" method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ request.id }}">
+                                    <input type="hidden" name="status" value="DECLINED">
+                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <div style="text-align: center;">
-            <p style="font-size: 24px; font-weight: bold;">No requests found.</p>
+        <div style="text-align: center;" class="d-flex justify-content-center align-content-center">
+            <p class="placeholder-glow" style="font-size: 24px; font-weight: bold;">No Amount Request Found</p>
         </div>
     {% endif %}
 
