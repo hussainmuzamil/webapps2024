@@ -22,6 +22,12 @@ class SendAmountForm(forms.Form):
     amount = forms.DecimalField(min_value=0)
 
 
+class TransferActionForm(forms.Form):
+    id = forms.IntegerField(widget=forms.HiddenInput)
+    receiver_email = forms.EmailField()
+    amount = forms.DecimalField()
+
+
 class AmountRequestActionForm(forms.Form):
     id = forms.IntegerField()
     status = forms.ChoiceField(choices=AmountRequest.REQUEST_STATUS)
@@ -40,4 +46,3 @@ class AmountRequestActionForm(forms.Form):
         amount_request.save()
 
         return amount_request
-

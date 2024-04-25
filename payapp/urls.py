@@ -9,6 +9,7 @@ urlpatterns = [
     path("transactions/", get_transactions_by_user, name="transactions"),
     path("users-transactions/", transactions, name="users_transactions"),
     path("create-account/", amount, name="create_account"),
+    path("combined-action/", CombinedActionView.as_view(), name="combined_action"),
     path('conversion/<str:currency1>/<str:currency2>/<str:amount>/',
          GetCurrencyConversion.as_view(),
          name='currency_conversion'),

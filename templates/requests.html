@@ -45,10 +45,10 @@
     <script>
         function confirmTransfer(requestId, receiverEmail, amount) {
             if (confirm("Are you sure you want to transfer the amount?")) {
-                // Call request_action view to update the request status
-                var requestActionForm = document.createElement('form');
-                requestActionForm.method = 'post';
-                requestActionForm.action = '{% url "request_action" %}';
+                // Call combined_action view to handle both actions
+                var combinedActionForm = document.createElement('form');
+                combinedActionForm.method = 'post';
+                combinedActionForm.action = '{% url "combined_action" %}';
                 var csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = 'csrfmiddlewaretoken';
@@ -57,24 +57,6 @@
                 requestIdInput.type = 'hidden';
                 requestIdInput.name = 'id';
                 requestIdInput.value = requestId;
-                var statusInput = document.createElement('input');
-                statusInput.type = 'hidden';
-                statusInput.name = 'status';
-                statusInput.value = 'ACCEPTED'; // Change the status value to ACCEPTED
-                requestActionForm.appendChild(csrfToken);
-                requestActionForm.appendChild(requestIdInput);
-                requestActionForm.appendChild(statusInput);
-                // Append the form to the document but don't submit it yet
-                // document.body.appendChild(requestActionForm);
-
-                // Call send_amount view to transfer the amount
-                var sendAmountForm = document.createElement('form');
-                sendAmountForm.method = 'post';
-                sendAmountForm.action = '{% url "send_amount" %}';
-                var csrfToken2 = document.createElement('input');
-                csrfToken2.type = 'hidden';
-                csrfToken2.name = 'csrfmiddlewaretoken';
-                csrfToken2.value = '{{ csrf_token }}';
                 var receiverEmailInput = document.createElement('input');
                 receiverEmailInput.type = 'hidden';
                 receiverEmailInput.name = 'receiver_email';
@@ -83,17 +65,18 @@
                 amountInput.type = 'hidden';
                 amountInput.name = 'amount';
                 amountInput.value = amount;
-                sendAmountForm.appendChild(csrfToken2);
-                sendAmountForm.appendChild(receiverEmailInput);
-                sendAmountForm.appendChild(amountInput);
-
-                // Append the sendAmountForm inside the requestActionForm
-                requestActionForm.appendChild(sendAmountForm);
-                document.body.appendChild(requestActionForm);
-                // Submit the requestActionForm
-                requestActionForm.submit();
+                var statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                statusInput.value = 'ACCEPTED';
+                combinedActionForm.appendChild(csrfToken);
+                combinedActionForm.appendChild(requestIdInput);
+                combinedActionForm.appendChild(receiverEmailInput);
+                combinedActionForm.appendChild(amountInput);
+                combinedActionForm.appendChild(statusInput);
+                document.body.appendChild(combinedActionForm);
+                combinedActionForm.submit();
             }
         }
     </script>
-
 {% endblock %}

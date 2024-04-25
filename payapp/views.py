@@ -5,6 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import render, redirect
 
 from django.contrib.auth import authenticate, logout, login
+from django.urls import reverse
+from django.views import View
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -251,7 +253,7 @@ def amount(request):
                 if user is not None:
                     print(user)
                     return render(request, "requests.html",
-                                  {'user': user, 'nav_items': nav_items,})
+                                  {'user': user, 'nav_items': nav_items, })
                 else:
                     return render(request, "requests.html", {'user': user, 'nav_items': nav_items})
             else:
@@ -261,6 +263,21 @@ def amount(request):
     else:
         form = AccountForm()
         return render(request, "auth/signup.html", {'form': form})
+
+
+class CombinedActionView(View):
+    def post(self, request, *args, **kwargs):
+        # Extract form data
+        send_amount_form = SendAmountForm(request.POST)
+        amount_request_action_form = AmountRequestActionForm(request.POST)
+
+        if amount_request_action_form.is_valid():
+            amount_request_action_form.save()
+
+        if send_amount_form.is_valid():
+            send_amount(request)
+
+        return redirect("home")
 
 
 class GetCurrencyConversion(APIView):
