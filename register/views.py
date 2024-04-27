@@ -56,12 +56,15 @@ def home(request):
         transactions_data = []
         for transaction in user_transactions:
             print(transaction.transaction_date)
-            transactions_data.append({
-                'sender_email': transaction.sender_account.user.email,
-                'receiver_email': transaction.receiver_account.user.email,
-                'amount': transaction.amount,
-                'date': transaction.transaction_date
-            })
+        transactions_data.append({
+            'sender_email': transaction.sender_account.user.email,
+            'receiver_email': transaction.receiver_account.user.email,
+            'sender_amount': transaction.sender_amount,
+            'receiver_amount': transaction.receiver_amount,
+            'sender_currency': transaction.sender_currency,
+            'receiver_currency': transaction.receiver_currency,
+            'date': transaction.transaction_date
+        })
         return render(request, template_name, {'nav_items': nav_items, 'transactions': transactions_data})
     else:
         balance, currency = user_balance(request)

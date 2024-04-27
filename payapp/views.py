@@ -357,5 +357,4 @@ def transactions(request):
             'receiver_currency': transaction.receiver_currency,
             'date': transaction.transaction_date
         })
-
     return render(request, "transactions.html", {'transactions': transactions_data, 'nav_items': nav_items})

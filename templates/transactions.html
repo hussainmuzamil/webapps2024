@@ -17,6 +17,7 @@
                             <th scope="col">Receiver Currency</th>
                         {% else %}
                             <th scope="col">Amount</th>
+                            <th scope="col">Currency</th>
                         {% endif %}
                     {% endif %}
                     <th scope="col">Date</th>
@@ -36,8 +37,10 @@
                                 <td>{{ transaction.receiver_currency }}</td>
                             {% elif user.email == transaction.receiver_email %}
                                 <td>{{ transaction.receiver_amount }}</td>
+                                <td>{{ transaction.receiver_currency }}</td>
                             {% else %}
                                 <td>{{ transaction.sender_amount }}</td>
+                                <td>{{ transaction.sender_currency }}</td>
                             {% endif %}
                         {% endif %}
                         <td>{{ transaction.date }}</td>
