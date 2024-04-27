@@ -190,11 +190,14 @@ def request_amount(request):
                 return render(request, "error.html", {'error_message': 'Invalid receiver email'})
 
             requested_amount = form.cleaned_data.get("amount")
+            requester_account = Account.objects.filter(user=user).first()
 
+            print(requester_account.currency)
             request = AmountRequest.objects.create(
                 requester=user,
                 receiver=receiver,
-                amount=requested_amount
+                amount=requested_amount,
+                requester_currency=requester_account.currency
             )
             return redirect("home")  # Redirect to home page after successful request
         else:
@@ -225,6 +228,7 @@ def request_action(request):
 def get_all_request_amount(request):
     balance, currency = user_balance(request)
     amount_requests = AmountRequest.objects.filter(receiver=request.user)
+
     return render(request, "requests.html",
                   {'amount_requests': amount_requests, 'balance': balance, 'currency': currency})
 

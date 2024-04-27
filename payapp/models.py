@@ -32,6 +32,7 @@ class AmountRequest(models.Model):
     requester = models.ForeignKey(Principal, related_name='requests_sent', on_delete=models.CASCADE)
     receiver = models.ForeignKey(Principal, related_name='requests_received', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    requester_currency = models.CharField(max_length=3,default="USD")
     status = models.CharField(max_length=20, choices=REQUEST_STATUS, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
 

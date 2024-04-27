@@ -9,6 +9,7 @@
                 <th scope="col">Sender</th>
                 <th scope="col">Receiver</th>
                 <th scope="col">Amount</th>
+                <th scope="col">Requester Currency</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
             </tr>
@@ -20,6 +21,7 @@
                     <td>{{ request.requester.email }}</td>
                     <td>{{ request.receiver.email }}</td>
                     <td>{{ request.amount }}</td>
+                    <td>{{ request.requester_currency }}</td>
                     <td>{{ request.status }}</td>
                     <td>
                         <div>
