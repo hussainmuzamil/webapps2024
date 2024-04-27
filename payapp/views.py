@@ -47,7 +47,10 @@ def get_transactions_by_user(request):
                 transactions_data.append({
                     'sender_email': transaction.sender_account.user.email,
                     'receiver_email': transaction.receiver_account.user.email,
-                    'amount': transaction.amount,
+                    'sender_amount': transaction.sender_amount,
+                    'receiver_amount': transaction.receiver_amount,
+                    'sender_currency': transaction.sender_currency,
+                    'receiver_currency': transaction.receiver_currency,
                     'date': transaction.transaction_date
                 })
             return render(request, "transactions.html", {'transactions': transactions_data, "nav_items": nav_items,
@@ -127,15 +130,17 @@ def send_amount(request):
             # Convert amount_to_send to Decimal before performing subtraction
             amount_to_send_decimal = Decimal(amount_to_send)
 
-            sender_account.amount -= amount_to_send_decimal
+            sender_account.amount -= Decimal(form.cleaned_data['amount'])
             sender_account.save()
             receiver_account.amount += amount_to_send_decimal
             receiver_account.save()
-
             transaction = Transaction.objects.create(
                 sender_account=sender_account,
                 receiver_account=receiver_account,
-                amount=float(amount_to_send)
+                receiver_amount=float(amount_to_send),
+                sender_amount=float(form.cleaned_data['amount']),
+                sender_currency=sender_account.currency,
+                receiver_currency=receiver_account.currency,
             )
             transaction.is_active = True
             transaction.save()
@@ -296,11 +301,11 @@ class GetCurrencyConversion(APIView):
             },
             "USD": {
                 "GBP": 0.70,
-                "EUR": 0.82
+                "EUR": 0.93
             },
             "EUR": {
                 "GBP": 0.86,
-                "USD": 1.22
+                "USD": 1.07
             }
         }
 
@@ -346,7 +351,10 @@ def transactions(request):
         transactions_data.append({
             'sender_email': transaction.sender_account.user.email,
             'receiver_email': transaction.receiver_account.user.email,
-            'amount': transaction.amount,
+            'sender_amount': transaction.sender_amount,
+            'receiver_amount': transaction.receiver_amount,
+            'sender_currency': transaction.sender_currency,
+            'receiver_currency': transaction.receiver_currency,
             'date': transaction.transaction_date
         })
 

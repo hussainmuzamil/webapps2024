@@ -15,7 +15,11 @@ class Account(models.Model):
 class Transaction(models.Model):
     sender_account = models.ForeignKey(Account, related_name="sent_transaction", on_delete=models.CASCADE)
     receiver_account = models.ForeignKey(Account, related_name="received_transaction", on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    receiver_amount = models.DecimalField(max_digits=10, decimal_places=2,default=0.0)
+    sender_amount = models.DecimalField(max_digits=10, decimal_places=2,default=0.0)
+    sender_currency = models.CharField(max_length=3,default="USD")
+    receiver_currency = models.CharField(max_length=3,default="USD")
+
     transaction_date = models.DateTimeField(auto_now_add=True)
 
 

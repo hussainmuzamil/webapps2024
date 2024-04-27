@@ -9,7 +9,16 @@
                     <th scope="col">#</th>
                     <th scope="col">Sender</th>
                     <th scope="col">Receiver</th>
-                    <th scope="col">Amount</th>
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <th scope="col">Sender Amount</th>
+                            <th scope="col">Receiver Amount</th>
+                            <th scope="col">Sender Currency</th>
+                            <th scope="col">Receiver Currency</th>
+                        {% else %}
+                            <th scope="col">Amount</th>
+                        {% endif %}
+                    {% endif %}
                     <th scope="col">Date</th>
                 </tr>
                 </thead>
@@ -18,8 +27,19 @@
                     <tr>
                         <th class="d-flex justify-content-center align-content-center" scope="row">{{ forloop.counter }}</th>
                         <td>{{ transaction.sender_email }}</td>
-                        <td>{{ transaction.receiver_email}}</td>
-                        <td>{{ transaction.amount }}</td>
+                        <td>{{ transaction.receiver_email }}</td>
+                        {% if user.is_authenticated %}
+                            {% if user.is_staff %}
+                                <td>{{ transaction.sender_amount }}</td>
+                                <td>{{ transaction.receiver_amount }}</td>
+                                <td>{{ transaction.sender_currency }}</td>
+                                <td>{{ transaction.receiver_currency }}</td>
+                            {% elif user.email == transaction.receiver_email %}
+                                <td>{{ transaction.receiver_amount }}</td>
+                            {% else %}
+                                <td>{{ transaction.sender_amount }}</td>
+                            {% endif %}
+                        {% endif %}
                         <td>{{ transaction.date }}</td>
                     </tr>
                 {% endfor %}
@@ -27,7 +47,7 @@
             </table>
         </div>
     {% else %}
-        <div style="text-align: center;" class="d-flex justify-content-center align-content-center">
+        <div class="text-center">
             <p class="placeholder-glow" style="font-size: 24px; font-weight: bold;">No Transactions Found</p>
         </div>
     {% endif %}

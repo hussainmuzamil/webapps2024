@@ -4,5 +4,4 @@ djangorestframework-simplejwt
 PyJWT
 pytz
 python-dotenv~=1.0.1
-pip~=23.2.1
-Django~=5.0.4
+Django~=4.2.11
