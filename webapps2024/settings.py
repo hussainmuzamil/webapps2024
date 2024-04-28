@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "crispy_forms",
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    "sslserver"
 
 ]
 
@@ -157,3 +158,15 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+# HTTPS configuration
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_SSL_CERTIFICATE = 'cert.pem'
+SECURE_SSL_KEY = 'key.pem'
+SECURE_HSTS_PRELOAD = True
+
